@@ -9,6 +9,6 @@ public class BattleTankTarget : TargetRules
 	{
 		Type = TargetType.Game;
 
-		ExtraModuleNames.AddRange( new string[] { "BattleTank" } );
+        ExtraModuleNames.AddRange( new string[] { "BattleTank" } );
 	}
 }

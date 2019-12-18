@@ -9,6 +9,6 @@ public class BattleTankEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "BattleTank" } );
+        ExtraModuleNames.AddRange( new string[] { "BattleTank" } );
 	}
 }
