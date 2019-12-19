@@ -25,6 +25,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	AimTowardsCrosshair();
+	
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
@@ -32,15 +33,16 @@ ATank* ATankPlayerController::GetControlledTank() const
 	return Cast<ATank>(GetPawn());
 }
 void ATankPlayerController::AimTowardsCrosshair()
-{
-	if (!GetControlledTank()) { return; }
+{	
+	auto ControlledTank = GetControlledTank();
+	if (!ControlledTank) { return; }
 	FVector HitLocation;
 
 	GetSightRayHitLocation(HitLocation);
-
-	UE_LOG(LogTemp, Warning, TEXT("HitLocation is %s; "), *HitLocation.ToString())
+	ControlledTank->AimAt(HitLocation);
 }
 
+// Deproject aim pointer on screen to world direction
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
 {
 	FVector CameraWorldLocation;
@@ -48,6 +50,7 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& 
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, LookDirection);
 }
 
+// Find world location based on look direction and line trace range
 bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const
 {
 	FHitResult HitResult;
@@ -62,6 +65,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	return true;
 }
 
+// Get locatin that screen im points to
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
 	int32 ViewPortSizeX;
