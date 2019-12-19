@@ -2,6 +2,7 @@
 
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Actor.h"
+#include "Engine/World.h"
 #include "TankAIController.h"
 
 void ATankAIController::BeginPlay()
