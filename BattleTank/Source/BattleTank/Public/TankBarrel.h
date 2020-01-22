@@ -20,7 +20,7 @@ public:
 private:
 	//Sensinble defaults	
 	UPROPERTY(EditAnyWhere, Category = Setup)
-	float MaxDegreesElevation = 50;
+	float MaxDegreesElevation = 40;
 	UPROPERTY(EditAnyWhere, Category = Setup)
 	float MinDegreesElevation = 0;
 	UPROPERTY(EditAnyWhere, Category = Setup)

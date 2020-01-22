@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "TankAimingComponent.h"
@@ -39,12 +40,15 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	auto ThisTankName = GetOwner()->GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s aims from %s"), *ThisTankName, Barrel->Get);
 
-	if (!Barrel)
+	// Components initialization check
+	if (!Barrel && !Turret)
 	{
 		return;
 	}
+
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
 	FVector OutLaunchVelocity(0);
+
 	bool bValidSolution = false;
 	bValidSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
@@ -58,12 +62,16 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 	
+	if (bValidSolution)
+	{
+		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+		MoveTurretTowards(AimDirection);
+	}
+	
 
-	FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
-
-	MoveBarrelTowards(AimDirection);
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: %s has a suggested launch velocity of %s, is valid = %d"), Time, *ThisTankName, *AimDirection.ToString(), bValidSolution)
+	//auto Time = GetWorld()->GetTimeSeconds();
+	//UE_LOG(LogTemp, Warning, TEXT("%f: %s has a suggested launch velocity of %s, is valid = %d"), Time, *ThisTankName, *AimDirection.ToString(), bValidSolution)
 }
 
 void UTankAimingComponent::SetBarrel(UTankBarrel* Barrel)
@@ -71,12 +79,30 @@ void UTankAimingComponent::SetBarrel(UTankBarrel* Barrel)
 	this->Barrel = Barrel;
 }
 
+void UTankAimingComponent::SetTurret(UTankTurret* Turret)
+{
+	this->Turret = Turret;
+}
+
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
-	//UE_LOG(LogTemp, Warning, TEXT("Aim as rotator = %s. Delta rotator = %s"), *AimAsRotator.ToString(), *DeltaRotator.ToString())
+	//UE_LOG(LogTemp, Warning, TEXT("Barrel Rotation is %s. Aim as rotator = %s. Delta rotator = %s"), *BarrelRotator.ToString(), *AimAsRotator.ToString(), *DeltaRotator.ToString())
 
-	Barrel->Elevate(5);
+	Barrel->Elevate(DeltaRotator.Pitch);
 
+}
+
+void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+{
+	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - TurretRotator;
+    //UE_LOG(LogTemp, Warning, TEXT("Turret Rotation is %s. Aim as rotator = %s. Delta rotator = %s"), *TurretRotator.ToString(), *AimAsRotator.ToString(), *DeltaRotator.ToString())
+	UE_LOG(LogTemp, Warning, TEXT("Aim Yaw rotation is %f, delta rotation is %f, turret rotation is %f"), AimAsRotator.Yaw, DeltaRotator.Yaw, TurretRotator.Yaw)
+
+	Turret->Turn(DeltaRotator.Yaw);
+	
+	
 }
