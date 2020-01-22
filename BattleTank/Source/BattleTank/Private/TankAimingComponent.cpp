@@ -29,7 +29,6 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	auto ThisTankName = GetOwner()->GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("%s aims from %s"), *ThisTankName, Barrel->Get);
 
 	// Components initialization check
 	if (!Barrel && !Turret)
@@ -52,17 +51,12 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		.0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
-	
 	if (bValidSolution)
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
 	}
-	
-
-	//auto Time = GetWorld()->GetTimeSeconds();
-	//UE_LOG(LogTemp, Warning, TEXT("%f: %s has a suggested launch velocity of %s, is valid = %d"), Time, *ThisTankName, *AimDirection.ToString(), bValidSolution)
 }
 
 void UTankAimingComponent::SetBarrel(UTankBarrel* Barrel)
@@ -75,25 +69,24 @@ void UTankAimingComponent::SetTurret(UTankTurret* Turret)
 	this->Turret = Turret;
 }
 
-void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) 
+{
+	//Current barrel rotation
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	//Aim rotation
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
-	//UE_LOG(LogTemp, Warning, TEXT("Barrel Rotation is %s. Aim as rotator = %s. Delta rotator = %s"), *BarrelRotator.ToString(), *AimAsRotator.ToString(), *DeltaRotator.ToString())
 
 	Barrel->Elevate(DeltaRotator.Pitch);
-
 }
 
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 {
+	// Current turret rotation
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	// Aim rotation
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - TurretRotator;
-    //UE_LOG(LogTemp, Warning, TEXT("Turret Rotation is %s. Aim as rotator = %s. Delta rotator = %s"), *TurretRotator.ToString(), *AimAsRotator.ToString(), *DeltaRotator.ToString())
-	UE_LOG(LogTemp, Warning, TEXT("Aim Yaw rotation is %f, delta rotation is %f, turret rotation is %f"), AimAsRotator.Yaw, DeltaRotator.Yaw, TurretRotator.Yaw)
 
 	Turret->Turn(DeltaRotator.Yaw);
-	
-	
 }

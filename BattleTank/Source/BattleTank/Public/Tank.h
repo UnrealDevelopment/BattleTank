@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurret(UTankTurret* Turret);
 
+	UFUNCTION(BlueprintCallable, Category = Mechanics)
+	void Fire();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,7 +43,4 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 10000;
-	
-
-
 };

@@ -16,7 +16,4 @@ void UTankBarrel::Elevate(float RelativeSpeed)
 	RawFrameRotatation = FMath::Clamp<float>(RawFrameRotatation, MinDegreesElevation, MaxDegreesElevation);
 	
 	SetRelativeRotation(FRotator(RawFrameRotatation, .0, .0));
-
-	//UE_LOG(LogTemp, Warning, TEXT("Rotation is %f"), RawFrameRotatation)
-
 }

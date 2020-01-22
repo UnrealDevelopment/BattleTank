@@ -22,8 +22,6 @@ public:
 	void SetBarrel(UTankBarrel* Barrel);
 	void SetTurret(UTankTurret* Turret);
 
-	
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
