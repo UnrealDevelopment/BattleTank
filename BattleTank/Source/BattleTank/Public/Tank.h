@@ -50,4 +50,7 @@ private:
 
 	// Local reference of a barrel to find firing point
 	UTankBarrel* Barrel;
+
+	float ReloadTimeInSeconds = 3.0;
+	double LastFireTime = 0;
 };

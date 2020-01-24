@@ -21,7 +21,6 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called to bind functionality to input
@@ -49,15 +48,16 @@ void ATank::SetTurret(UTankTurret* Turret)
 
 void ATank::Fire()
 {
-	if (!ProjectileBP)
+	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (ProjectileBP && bIsReloaded)
 	{
-		return;
-	}
 	FVector NewLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
 	FRotator NewRotator = Barrel->GetSocketRotation(FName("FiringPoint"));
 
 	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, NewLocation, NewRotator);
-
-	Projectile->LaunchProjectile(LaunchSpeed);
+	Projectile->LaunchProjectile(LaunchSpeed);	
+	LastFireTime = FPlatformTime::Seconds();
+	}
 }
 
