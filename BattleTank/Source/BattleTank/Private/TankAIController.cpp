@@ -20,6 +20,7 @@ void ATankAIController::Tick(float DeltaTime)
 	{
 		return;
 	}
+	MoveToActor(PlayerTank, AcceptanceRate); 
 	ControlledTank->AimAt(PlayerTank->GetActorLocation());
-	//ControlledTank->Fire(); // Add fire rate
+	ControlledTank->Fire(); 
 }

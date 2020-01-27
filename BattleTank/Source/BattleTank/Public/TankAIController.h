@@ -18,7 +18,8 @@ class BATTLETANK_API ATankAIController : public AAIController
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-
 private:
 
+	UPROPERTY(EditAnywhere, category = Setup)
+	float AcceptanceRate = 300.0f;
 };
