@@ -27,6 +27,22 @@ void UTankMovementComponent::IntendTurn(float Throw)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+
+	float DotProduct = FVector::DotProduct(TankForward, AIForwardIntention); // Throw to apply movement
+
+	float CrossProduct = FVector::CrossProduct(TankForward, AIForwardIntention).Z; // Throw to apply turning
+
+	
+
+	IntendTurn(CrossProduct);
+	IntendMoveForward(DotProduct);
+
+	/*
+	float Time = GetWorld()->GetTimeSeconds();
 	auto Name = GetOwner()->GetName();
 	UE_LOG(LogTemp, Warning, TEXT("Tank %s has requested move velocity %s"), *Name, *MoveVelocity.ToString())
+	UE_LOG(LogTemp, Warning, TEXT("%f: Dot product is  %f. Call from RequestDirectMove"), Time, DotProduct)
+	*/
 }

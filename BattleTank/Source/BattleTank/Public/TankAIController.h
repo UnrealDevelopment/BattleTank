@@ -21,5 +21,5 @@ public:
 private:
 
 	UPROPERTY(EditAnywhere, category = Setup)
-	float AcceptanceRate = 300.0f;
+	float AcceptanceRate = 300000.0f;
 };
