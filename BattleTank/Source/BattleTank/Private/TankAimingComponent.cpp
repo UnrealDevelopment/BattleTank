@@ -21,21 +21,28 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
 	
 }
 
+void UTankAimingComponent::Initialize(UTankBarrel* Barrel, UTankTurret* Turret)
+{
+	this->Barrel = Barrel;
+	this->Turret = Turret;
+}
+
+UTankBarrel* UTankAimingComponent::GetBarrel() const
+{
+	return Barrel;
+}
+
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	auto ThisTankName = GetOwner()->GetName();
-
-	// Components initialization check
-	if (!Barrel && !Turret)
+	if (Barrel == nullptr || Turret == nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("No turret or barrel initialized"))
 		return;
 	}
-
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
 	FVector OutLaunchVelocity(0);
 
@@ -57,16 +64,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
 	}
-}
-
-void UTankAimingComponent::SetBarrel(UTankBarrel* Barrel)
-{
-	this->Barrel = Barrel;
-}
-
-void UTankAimingComponent::SetTurret(UTankTurret* Turret)
-{
-	this->Turret = Turret;
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) 

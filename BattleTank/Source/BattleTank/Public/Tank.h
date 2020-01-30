@@ -24,14 +24,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	void AimAt(FVector HitLocation);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrel(UTankBarrel* Barrel);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurret(UTankTurret* Turret);
 
 	UFUNCTION(BlueprintCallable, Category = Mechanics)
 	void Fire();
@@ -40,6 +33,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -54,6 +48,7 @@ private:
 	TSubclassOf<AProjectile> ProjectileBP;
 
 	// Local reference of a barrel to find firing point
+	//UPROPERTY(EditDefaultsOnly, Category = Setup)
 	UTankBarrel* Barrel;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
