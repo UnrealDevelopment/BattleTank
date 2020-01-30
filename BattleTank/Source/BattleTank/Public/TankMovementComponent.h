@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright reserved by Serhii D. 
 
 #pragma once
 
@@ -9,7 +9,7 @@
 // Forward Declarations
 class UTankTrack;
 /**
- * 
+ * Responsible for fly-by-wire tank controls and AI pathfinding
  */
 UCLASS( ClassGroup = (Custom), meta = (BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
@@ -26,9 +26,10 @@ public:
 	UFUNCTION(BlueprintCallable, category = Input)
 	void IntendTurn(float Throw);
 
+private:
+	// Called in pathfinding UE logic by the AI controllers
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
-private:
 	UTankTrack* RightTrack = nullptr;
 	UTankTrack* LeftTrack = nullptr;
 };
