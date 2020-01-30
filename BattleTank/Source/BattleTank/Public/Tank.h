@@ -7,11 +7,8 @@
 #include "Tank.generated.h"
 
 // Forward Declarations
-class UTankBarrel; 
-class UTankTurret;
 class UTankAimingComponent;
 class UTankMovementComponent;
-class AProjectile;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -38,20 +35,4 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	UTankMovementComponent* TankMovementComponent = nullptr;
-	
-
-private:
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 10000;
-
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
-	TSubclassOf<AProjectile> ProjectileBP;
-
-	// Local reference of a barrel to find firing point
-	//UPROPERTY(EditDefaultsOnly, Category = Setup)
-	UTankBarrel* Barrel;
-
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float ReloadTimeInSeconds = 3.0;
-	double LastFireTime = 0;
 };

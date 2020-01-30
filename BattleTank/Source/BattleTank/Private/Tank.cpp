@@ -2,8 +2,6 @@
 
 #include "TankAimingComponent.h"
 #include "TankMovementComponent.h"
-#include "TankBarrel.h"
-#include "Projectile.h"
 #include "Tank.h"
 #include "Engine/World.h"
 #include "..\Public\Tank.h"
@@ -19,7 +17,6 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	Barrel = TankAimingComponent->GetBarrel();
 }
 
 // Called to bind functionality to input
@@ -30,20 +27,11 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::AimAt(FVector HitLocation)
 {
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	TankAimingComponent->AimAt(HitLocation);
 }
 
 void ATank::Fire()
 {
-	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (ProjectileBP && bIsReloaded)
-	{
-	FVector NewLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
-	FRotator NewRotator = Barrel->GetSocketRotation(FName("FiringPoint"));
-
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, NewLocation, NewRotator);
-	Projectile->LaunchProjectile(LaunchSpeed);	
-	LastFireTime = FPlatformTime::Seconds();
-	}
+	TankAimingComponent->Fire();
 }
 

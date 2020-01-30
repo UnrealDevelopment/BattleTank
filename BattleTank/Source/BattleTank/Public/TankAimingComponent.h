@@ -16,7 +16,11 @@ enum class EAimingStatus : uint8
 // Forward Declarations
 class UTankBarrel; 
 class UTankTurret;
+class AProjectile;
 
+/**
+* Responsible for aiming and lunchung a projectile
+*/
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
@@ -29,9 +33,9 @@ public:
 	UFUNCTION(BlueprintCallable, category = Setup)
 	void Initialize(UTankBarrel* Barrel, UTankTurret* Turret);
 
-	UTankBarrel* GetBarrel() const;
+	void Fire();
 
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void AimAt(FVector HitLocation);
 
 protected:
 	// Called when the game starts
@@ -45,4 +49,14 @@ private:
 	UTankTurret* Turret = nullptr;
 	void MoveBarrelTowards(FVector AimDirection);
 	void MoveTurretTowards(FVector AimDirection);
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 10000;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBP;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3.0;
+	double LastFireTime = 0;
 };
