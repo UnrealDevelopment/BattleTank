@@ -1,8 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright reserved by Serhii D. 
 
+#include "Tank.h"
 #include "TankAimingComponent.h"
 #include "TankMovementComponent.h"
-#include "Tank.h"
 #include "Engine/World.h"
 #include "..\Public\Tank.h"
 
@@ -27,11 +27,13 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if (!ensure(TankAimingComponent)){return;}
 	TankAimingComponent->AimAt(HitLocation);
 }
 
 void ATank::Fire()
 {
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->Fire();
 }
 

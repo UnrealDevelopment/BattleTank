@@ -1,24 +1,25 @@
 // Copyright reserved by Serhii D. 
 
-#include "TankTrack.h"
 #include "TankMovementComponent.h"
+#include "TankTrack.h"
 
 void UTankMovementComponent::Initialize(UTankTrack* LeftTrack, UTankTrack* RightTrack)
 {
+	if (!ensure(LeftTrack && RightTrack)) { return; } // Pointer protection
 	this->LeftTrack = LeftTrack;
 	this->RightTrack = RightTrack;
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	if (!LeftTrack && !RightTrack) { return; } // Pointer protection
+	if (!ensure(LeftTrack && RightTrack)) { return; } // Pointer protection
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
 
 void UTankMovementComponent::IntendTurn(float Throw)
 {
-	if (!LeftTrack && !RightTrack) { return; } // Pointer protection
+	if (!ensure(LeftTrack && RightTrack)) { return; } // Pointer protection
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 }

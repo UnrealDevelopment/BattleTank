@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright reserved by Serhii D. 
 
 #pragma once
 
@@ -8,8 +8,10 @@
 
 //Forward declarations
 class ATank;
+class UTankAimingComponent;
+
 /**
- * 
+ *  Responsible for helping the player to controll aiming process
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -23,6 +25,9 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable, category = Setup)
 	ATank* GetControlledTank() const;
+
+	UFUNCTION(BlueprintImplementableEvent, category = Setup)
+	void FoundAimingComponet(UTankAimingComponent* AimingComponent);
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float CrossHairXLocation = 0.5;

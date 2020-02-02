@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright reserved by Serhii D. 
 
 #pragma once
 
@@ -42,7 +42,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, category = State)
-	EAimingStatus AimingStatus = EAimingStatus::Reloading;
+	EAimingStatus AimingStatus = EAimingStatus::Aiming;
 
 private:
 	UTankBarrel* Barrel = nullptr;

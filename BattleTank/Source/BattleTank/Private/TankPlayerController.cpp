@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright reserved by Serhii D. 
 
-#include "Tank.h"
-#include "Engine/World.h"
 #include "TankPlayerController.h"
+#include "Tank.h"
+#include "TankAimingComponent.h"
+#include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -10,13 +11,20 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	auto ControlledTank = GetControlledTank();
+	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent))
+	{
+		FoundAimingComponet(AimingComponent);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Aiming component is not found by the time Player Controller begins to play"))
+	}
 }
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 	AimTowardsCrosshair();
-	
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
@@ -26,7 +34,7 @@ ATank* ATankPlayerController::GetControlledTank() const
 void ATankPlayerController::AimTowardsCrosshair()
 {	
 	auto ControlledTank = GetControlledTank();
-	if (!ControlledTank) { return; }
+	if (!ensure(ControlledTank)) { return; }
 	FVector HitLocation;
 
 	GetSightRayHitLocation(HitLocation);
@@ -56,7 +64,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	return true;
 }
 
-// Get locatin that screen im points to
+// Get locatin that screen aim points to
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
 	int32 ViewPortSizeX;

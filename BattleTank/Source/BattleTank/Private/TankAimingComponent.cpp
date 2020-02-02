@@ -1,11 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright reserved by Serhii D. 
+#include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
-#include "TankAimingComponent.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -13,7 +12,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false; // TODO deside if it really has to tick
-
+	//UE_LOG(LogTemp, Warning, TEXT("SEQUENCE LOG: TankAimingComponent.cpp->Constructor()"))
 	// ...
 }
 
@@ -23,22 +22,21 @@ void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	// ...
-	
 }
 
 void UTankAimingComponent::Initialize(UTankBarrel* Barrel, UTankTurret* Turret)
 {
+	if (!ensure(Barrel && Turret))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No turret or barrel initialized"))
+		return;
+	}
 	this->Barrel = Barrel;
 	this->Turret = Turret;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	if (Barrel == nullptr || Turret == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No turret or barrel initialized"))
-		return;
-	}
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
 	FVector OutLaunchVelocity(0);
 
@@ -63,8 +61,9 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 }
 void UTankAimingComponent::Fire()
 {
+	if (!ensure(ProjectileBP)) { return; }
 	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (ProjectileBP && bIsReloaded)
+	if (bIsReloaded)
 	{
 		FVector NewLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
 		FRotator NewRotator = Barrel->GetSocketRotation(FName("FiringPoint"));
