@@ -24,6 +24,7 @@ void UTankMovementComponent::IntendTurn(float Throw)
 	RightTrack->SetThrottle(-Throw);
 }
 
+// Overriding engine method to perfom AI tank movement using tank movement component
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
 	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();

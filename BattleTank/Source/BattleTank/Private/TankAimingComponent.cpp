@@ -12,7 +12,6 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false; // TODO deside if it really has to tick
-	//UE_LOG(LogTemp, Warning, TEXT("SEQUENCE LOG: TankAimingComponent.cpp->Constructor()"))
 	// ...
 }
 
@@ -26,17 +25,14 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::Initialize(UTankBarrel* Barrel, UTankTurret* Turret)
 {
-	if (!ensure(Barrel && Turret))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No turret or barrel initialized"))
-		return;
-	}
+	if (!ensure(Barrel && Turret)){ return;	}
 	this->Barrel = Barrel;
 	this->Turret = Turret;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
+	if (!ensure(Barrel)) { return; }
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FiringPoint"));
 	FVector OutLaunchVelocity(0);
 
@@ -61,7 +57,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 }
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(ProjectileBP)) { return; }
+	if (!ensure(ProjectileBP && Barrel)) { return; }
 	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 	if (bIsReloaded)
 	{
@@ -76,6 +72,7 @@ void UTankAimingComponent::Fire()
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) 
 {
+	if (!ensure(Barrel)) { return; }
 	//Current barrel rotation
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	//Aim rotation
@@ -87,6 +84,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 {
+	if (!ensure(Turret)) { return; }
 	// Current turret rotation
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
 	// Aim rotation

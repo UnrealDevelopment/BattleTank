@@ -21,7 +21,7 @@ class AProjectile;
 /**
 * Responsible for aiming and lunchung a projectile
 */
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -33,6 +33,7 @@ public:
 	UFUNCTION(BlueprintCallable, category = Setup)
 	void Initialize(UTankBarrel* Barrel, UTankTurret* Turret);
 
+	UFUNCTION(BlueprintCallable, Category = Mechanics)
 	void Fire();
 
 	void AimAt(FVector HitLocation);

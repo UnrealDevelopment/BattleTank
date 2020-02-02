@@ -7,7 +7,6 @@
 #include "TankPlayerController.generated.h"
 
 //Forward declarations
-class ATank;
 class UTankAimingComponent;
 
 /**
@@ -23,8 +22,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UFUNCTION(BlueprintCallable, category = Setup)
-	ATank* GetControlledTank() const;
 
 	UFUNCTION(BlueprintImplementableEvent, category = Setup)
 	void FoundAimingComponet(UTankAimingComponent* AimingComponent);
@@ -35,6 +32,8 @@ private:
 	float CrossHairYLocation = 0.33333;
 	UPROPERTY(EditDefaultsOnly)
 	int32 LineTraceRange = 10000;
+
+	UTankAimingComponent* TankAimingComponent = nullptr;
 
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	void AimTowardsCrosshair();
