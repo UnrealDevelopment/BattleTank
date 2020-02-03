@@ -30,7 +30,7 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, category = Setup)
 	void Initialize(UTankBarrel* Barrel, UTankTurret* Turret);
