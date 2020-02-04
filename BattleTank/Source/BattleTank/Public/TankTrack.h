@@ -30,7 +30,7 @@ private:
 	float CurrentThrottle = 0;
 	// Maximum force per track in Newtons
 	UPROPERTY(EditDefaultsOnly)
-	float MaxDrivingForce = 40000000;
+	float MaxDrivingForce = 60000000;
 
 	void ApplySidewaysForce();
 	UFUNCTION()

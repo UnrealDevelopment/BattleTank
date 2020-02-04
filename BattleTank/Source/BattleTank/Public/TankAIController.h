@@ -22,5 +22,5 @@ public:
 private:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	UPROPERTY(EditAnywhere, category = Setup)
-	float AcceptanceRate = 300000.0f;
+	float AcceptanceRate = 10000.0f;
 };

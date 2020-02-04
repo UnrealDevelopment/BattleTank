@@ -4,6 +4,7 @@
 #include "TankAimingComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Actor.h"
+#include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 
 void ATankAIController::BeginPlay()
@@ -19,9 +20,19 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto ControlledTank = GetPawn();
 	if (!ensure(ControlledTank && PlayerTank)){ return; }
-	MoveToActor(PlayerTank, AcceptanceRate); 
+	
+	//DrawDebugSphere(GetWorld(), GetPawn()->GetActorLocation(), 5000.f, 32, FColor::Red);
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetPawn()->GetActorLocation().ToCompactString())
+	
+	// MoveToActor ignores acceptance rate while MoveToLocation works just fine
+	// MoveToActor(Cast<AActor>(PlayerTank), 5000.f);
+	MoveToLocation(PlayerTank->GetActorLocation(), AcceptanceRate);
+
 	TankAimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(PlayerTank->GetActorLocation());
-	TankAimingComponent->Fire();
+	if (TankAimingComponent->GetAimingStatus() == EAimingStatus::Locked)
+	{
+		TankAimingComponent->Fire();
+	}
 }

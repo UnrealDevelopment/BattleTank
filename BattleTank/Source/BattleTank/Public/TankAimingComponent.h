@@ -11,7 +11,8 @@ enum class EAimingStatus : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	Empty
 };
 // Forward Declarations
 class UTankBarrel; 
@@ -40,6 +41,11 @@ public:
 
 	void AimAt(FVector HitLocation);
 
+	EAimingStatus GetAimingStatus() const;
+
+	UFUNCTION(BlueprintCallable, Category = UI)
+	int GetAmmo() const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -47,9 +53,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, category = State)
 	EAimingStatus AimingStatus = EAimingStatus::Locked;
 
+	
+
 private:
 	void MoveBarrelTowards(FVector AimDirection);
 	bool bIsBarrelMoving();
+	
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 	
@@ -57,6 +66,11 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 10000;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	int Ammo = 3;
+
+
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBP;
