@@ -49,8 +49,6 @@ protected:
 
 private:
 	void MoveBarrelTowards(FVector AimDirection);
-	void MoveTurretTowards(FVector AimDirection);
-
 	bool bIsBarrelMoving();
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
