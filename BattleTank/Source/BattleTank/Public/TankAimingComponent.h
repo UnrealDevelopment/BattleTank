@@ -44,7 +44,7 @@ public:
 	EAimingStatus GetAimingStatus() const;
 
 	UFUNCTION(BlueprintCallable, Category = UI)
-	int GetAmmo() const;
+	int32 GetAmmo() const;
 
 protected:
 	// Called when the game starts
@@ -68,7 +68,7 @@ private:
 	float LaunchSpeed = 10000;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	int Ammo = 3;
+	int32 Ammo = 3;
 
 
 

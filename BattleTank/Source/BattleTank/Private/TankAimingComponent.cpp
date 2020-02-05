@@ -45,6 +45,16 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	}
 }
 
+int32 UTankAimingComponent::GetAmmo() const
+{
+	return Ammo;
+}
+
+EAimingStatus UTankAimingComponent::GetAimingStatus() const
+{
+	return AimingStatus;
+}
+
 void UTankAimingComponent::Initialize(UTankBarrel* Barrel, UTankTurret* Turret)
 {
 	if (!ensure(Barrel && Turret)){ return;	}
@@ -77,10 +87,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 		//MoveTurretTowards(AimDirection);
 	}
 }
-EAimingStatus UTankAimingComponent::GetAimingStatus() const
-{
-	return AimingStatus;
-}
+
 void UTankAimingComponent::Fire()
 {
 	if (!ensure(ProjectileBP && Barrel)) { return; }
@@ -94,11 +101,6 @@ void UTankAimingComponent::Fire()
 		Ammo--;
 		LastFireTime = FPlatformTime::Seconds();
 	}
-}
-
-int UTankAimingComponent::GetAmmo() const
-{
-	return Ammo;
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
