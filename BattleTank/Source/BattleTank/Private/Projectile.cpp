@@ -3,6 +3,8 @@
 #include "Projectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -28,6 +30,8 @@ AProjectile::AProjectile()
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("MovementComponent"));
 	ProjectileMovementComponent->bAutoActivate = false;
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -51,8 +55,9 @@ void AProjectile::OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 	ExplosionForce->FireImpulse();
 
 	SetRootComponent(ImpactBlast);
-	CollisionMesh->DestroyComponent();
+	//CollisionMesh->DestroyComponent();
 
+	UGameplayStatics::ApplyRadialDamage(this, Damage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
 	FTimerHandle OutTimetHandle;
 	GetWorld()->GetTimerManager().SetTimer(OutTimetHandle, this, &AProjectile::InTimerMethod, 1.f, false, DestructionDelay);
 }

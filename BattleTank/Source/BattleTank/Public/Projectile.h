@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+#include "Engine/EngineTypes.h"
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
@@ -44,6 +45,10 @@ public:
 
 	void InTimerMethod();
 
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Performance")
 	float DestructionDelay = 10.0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mechanics")
+	float Damage = 20.0;
 };
