@@ -36,8 +36,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-int32 ATank::GetHelthPoints()
+float ATank::GetHealthPercent() const
 {
-	return HealthPoints;
+	return (float)CurrentHealth / (float)HealthPoints;
 }
 

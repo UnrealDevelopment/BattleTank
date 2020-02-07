@@ -17,7 +17,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	int32 GetHelthPoints();
+
+	// returnts health percent 0 to 1
+	UFUNCTION(BlueprintPure, Category = "Mechanics")
+	float GetHealthPercent() const; 
 
 protected:
 	// Called when the game starts or when spawned
