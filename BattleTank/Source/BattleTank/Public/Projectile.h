@@ -42,4 +42,8 @@ public:
 	UFUNCTION()
 	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	void InTimerMethod();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Performance")
+	float DestructionDelay = 10.0;
 };

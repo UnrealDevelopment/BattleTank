@@ -2,6 +2,7 @@
 
 #include "Projectile.h"
 #include "Components/StaticMeshComponent.h"
+#include "TimerManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -48,6 +49,16 @@ void AProjectile::OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	ExplosionForce->FireImpulse();
+
+	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
+
+	FTimerHandle OutTimetHandle;
+	GetWorld()->GetTimerManager().SetTimer(OutTimetHandle, this, &AProjectile::InTimerMethod, 1.f, false, DestructionDelay);
+}
+
+void AProjectile::InTimerMethod()
+{
+	Destroy();
 }
 

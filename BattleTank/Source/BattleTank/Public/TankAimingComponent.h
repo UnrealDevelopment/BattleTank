@@ -51,7 +51,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, category = State)
-	EAimingStatus AimingStatus = EAimingStatus::Locked;
+	EAimingStatus AimingStatus = EAimingStatus::Reloading;
 
 	
 
