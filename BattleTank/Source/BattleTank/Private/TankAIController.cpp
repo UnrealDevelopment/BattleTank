@@ -20,7 +20,8 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto ControlledTank = GetPawn();
-	if (!ensure(ControlledTank && PlayerTank)){ return; }
+	if (!ensure(ControlledTank)){ return; }
+	if (!PlayerTank){ return; } // If Player's is destroyed stopaiming  
 	
 	//DrawDebugSphere(GetWorld(), GetPawn()->GetActorLocation(), 5000.f, 32, FColor::Red);
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetPawn()->GetActorLocation().ToCompactString())
@@ -52,5 +53,6 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::OnTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("On AI tank death debug print"))
+	GetPawn()->DetachFromControllerPendingDestroy();
+	//UE_LOG(LogTemp, Warning, TEXT("On AI tank death debug print"))
 }

@@ -42,5 +42,5 @@ private:
 	int32 HealthPoints = 100.0;
 
 	UPROPERTY(VisibleAnywhere, Category = "Mechanics")
-	int32 CurrentHealth = HealthPoints;
+	int32 CurrentHealth;
 };
