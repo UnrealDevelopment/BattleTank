@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankTrack.h"
+#include "SprungWheel.h"
+#include "WheelSpawnPoint.h"
 #include "Math/UnrealMathUtility.h"
 
 UTankTrack::UTankTrack() 
@@ -11,7 +13,6 @@ UTankTrack::UTankTrack()
 void UTankTrack::BeginPlay()
 {
 	Super::BeginPlay();
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 }
 
 void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -25,37 +26,33 @@ void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, +1);
+	auto CurrentThrottle = FMath::Clamp<float>(Throttle, -1, +1);
+	DriveTrack(CurrentThrottle);
 }
 
-void UTankTrack::DriveTrack()
+void UTankTrack::DriveTrack(float CurrentThrottle)
 {
-	auto ForceApplyed = GetForwardVector() * CurrentThrottle * MaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	TankRoot->AddForceAtLocation(ForceApplyed, ForceLocation);
+	auto ForceApplyed = CurrentThrottle * MaxDrivingForce;
+	auto Wheels = GetWheels();
+	auto ForcePerWheel = ForceApplyed / Wheels.Num();
+	for (ASprungWheel* Wheel : Wheels)
+	{
+		Wheel->AddDrivingForce(ForcePerWheel);
+	}
 }
 
-void UTankTrack::ApplySidewaysForce()
+TArray<ASprungWheel*> UTankTrack::GetWheels() const
 {
-	// Side speed that happens due to slipping tracks
-	auto SlippageSpeed = FVector::DotProduct(GetComponentVelocity(), GetRightVector());
-
-	// Correction acceleration 
-	auto DeltaTime = GetWorld()->GetDeltaSeconds();
-	auto Acceleration = SlippageSpeed / DeltaTime * (-GetRightVector());
-
-	// Find correction force F = m*a
-	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-	auto CorrectionForce = (TankRoot->CalculateMass() * Acceleration) / 2;
-
-	TankRoot->AddForce(CorrectionForce);
+	TArray<USceneComponent*> OutTrackChildren;
+	GetChildrenComponents(false, OutTrackChildren);
+	TArray<ASprungWheel*> Wheels;
+	for (USceneComponent* Child : OutTrackChildren)
+	{
+		if (auto SpawnPoint = Cast<UWheelSpawnPoint>(Child))
+		{
+			Wheels.Add(Cast<ASprungWheel>(SpawnPoint->GetSpawnedActor()));
+		}
+	}
+	return Wheels;
 }
 
-void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-	DriveTrack();
-	ApplySidewaysForce();
-	CurrentThrottle = 0;
-	//UE_LOG(LogTemp, Warning, TEXT("Track hit ground"))
-}

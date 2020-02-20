@@ -24,15 +24,12 @@ public:
 	UFUNCTION(BlueprintCallable, category = Input)
 	void SetThrottle(float Throttle);
 
-	void DriveTrack();
+	void DriveTrack(float CurrentThrottle);
 	
 private:
-	float CurrentThrottle = 0;
 	// Maximum force per track in Newtons
 	UPROPERTY(EditDefaultsOnly)
 	float MaxDrivingForce = 60000000;
 
-	void ApplySidewaysForce();
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	TArray<class ASprungWheel*> GetWheels() const;
 };

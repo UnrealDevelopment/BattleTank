@@ -17,14 +17,15 @@ class BATTLETANK_API ASprungWheel : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASprungWheel();
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Apply force to drive a wheel, positive value respons to forward move and negative to backwards
+	void AddDrivingForce(float ForceMagnitude);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 private:
 	// Components

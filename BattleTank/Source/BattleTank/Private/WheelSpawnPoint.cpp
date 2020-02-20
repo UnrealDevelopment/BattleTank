@@ -15,6 +15,11 @@ UWheelSpawnPoint::UWheelSpawnPoint()
 }
 
 
+AActor* UWheelSpawnPoint::GetSpawnedActor() const
+{
+	return SpawnedActor;
+}
+
 // Called when the game starts
 void UWheelSpawnPoint::BeginPlay()
 {
@@ -23,7 +28,7 @@ void UWheelSpawnPoint::BeginPlay()
 	// ...
 	//auto LeftTrackSocketTransform = GetAttachParent()->GetAttachParent()->GetSocketTransform(FName("LeftTrack"));
 	//UE_LOG(LogTemp, Warning, TEXT("Spawn Point parent is %s"), *LeftTrackSocketLocation.ToString())
-	auto SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(ActorBP, GetComponentTransform());
+	SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(ActorBP, GetComponentTransform());
 	if (!SpawnedActor) return;
 	SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
 	UGameplayStatics::FinishSpawningActor(SpawnedActor, GetComponentTransform());
