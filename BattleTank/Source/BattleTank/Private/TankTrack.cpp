@@ -45,14 +45,17 @@ TArray<ASprungWheel*> UTankTrack::GetWheels() const
 {
 	TArray<USceneComponent*> OutTrackChildren;
 	GetChildrenComponents(false, OutTrackChildren);
-	TArray<ASprungWheel*> Wheels;
+	TArray<ASprungWheel*> Result;
 	for (USceneComponent* Child : OutTrackChildren)
 	{
 		if (auto SpawnPoint = Cast<UWheelSpawnPoint>(Child))
 		{
-			Wheels.Add(Cast<ASprungWheel>(SpawnPoint->GetSpawnedActor()));
+			if (auto SprungWheel = Cast<ASprungWheel>(SpawnPoint->GetSpawnedActor()))
+			{
+				Result.Add(SprungWheel);
+			}
 		}
 	}
-	return Wheels;
+	return Result;
 }
 

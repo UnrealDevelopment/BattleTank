@@ -14,14 +14,16 @@ ASprungWheel::ASprungWheel()
 	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
 	SetRootComponent(Spring);
 	
-	Axel = CreateDefaultSubobject<USphereComponent>(FName("Axel"));
-	Axel->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
+	Axle = CreateDefaultSubobject<USphereComponent>(FName("Axle"));
+	Axle->AttachToComponent(Spring, FAttachmentTransformRules::KeepRelativeTransform);
+
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
+	Wheel->AttachToComponent(Axle, FAttachmentTransformRules::KeepRelativeTransform);
 
 	Roller = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Roller"));
-	Roller->AttachToComponent(Axel, FAttachmentTransformRules::KeepRelativeTransform);
+	Roller->AttachToComponent(Axle, FAttachmentTransformRules::KeepRelativeTransform);
 
-	Wheel = CreateDefaultSubobject<USphereComponent>(FName("FUCKINGWHEELTHATISDISPLAYED"));
-	Wheel->AttachToComponent(Roller, FAttachmentTransformRules::KeepRelativeTransform);
+
 
 }
 
@@ -30,8 +32,8 @@ void ASprungWheel::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Spring->SetConstrainedComponents(Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent()), NAME_None, Axel, NAME_None);
-	Roller->SetConstrainedComponents(Axel, NAME_None, Wheel, NAME_None);
+	Spring->SetConstrainedComponents(Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent()), NAME_None, Axle, NAME_None);
+	Roller->SetConstrainedComponents(Axle, NAME_None, Wheel, NAME_None);
 }
 
 // Called every frame
@@ -43,7 +45,10 @@ void ASprungWheel::Tick(float DeltaTime)
 
 void ASprungWheel::AddDrivingForce(float ForceMagnitude)
 {
-	Wheel->AddForce(Axel->GetForwardVector() * ForceMagnitude);
+	if (ensure(Wheel))
+	{
+		Wheel->AddForce(Axle->GetForwardVector() * ForceMagnitude);
+	}
 }
 
 

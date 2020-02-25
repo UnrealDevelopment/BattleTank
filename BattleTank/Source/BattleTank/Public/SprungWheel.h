@@ -32,7 +32,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* Spring = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USphereComponent* Axel = nullptr;
+	USphereComponent* Axle = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* Roller = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
