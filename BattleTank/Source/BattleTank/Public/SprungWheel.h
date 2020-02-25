@@ -38,4 +38,8 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* Wheel = nullptr;
 
+	float ForceMagnitude;
+
+	UFUNCTION()
+	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
